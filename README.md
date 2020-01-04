@@ -1,4 +1,4 @@
-# genome_windows_generator
+# windows_generator
 
 ```python
 from windows_generator import WindowsGenerator, NoisyWindowsGenerator
