@@ -20,6 +20,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install . --user --upgrade # Install the package in order to test it
+        # PACKAGE NOT YET ON PIP
+        git clone https://github.com/LucaCappelletti94/ucsc_genomes_downloader
+        pip install ./ucsc_genomes_downloader --user --upgrade
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -29,6 +33,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pip install . --user --upgrade
-        pip install pytest
-        pytest
+        pip install pytest             # Install pytest
+        pytest -s                      # Run all the test enabling prints
