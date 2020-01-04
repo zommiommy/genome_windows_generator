@@ -1,7 +1,5 @@
-Package                 Version   
------------------------ ----------
-compress-pickle         1.1.0     
-numpy                   1.18.0    
-pandas                  0.25.3    
-tqdm                    4.41.0    
-ucsc-genomes-downloader 1.0.2     
+compress-pickle==1.1.0
+numpy==1.18.0
+pandas==0.25.3
+tqdm==4.41.0
+ucsc-genomes-downloader==1.0.2
