@@ -127,6 +127,8 @@ class WindowsGenerator:
         mid_point = ((gaps.chromEnd + gaps.chromStart)/2).round().astype(int)
         gaps.chromStart = (mid_point - self.window_size/2).round().astype(int)
         gaps.chromEnd = (mid_point + self.window_size/2).round().astype(int)
+        if len(gaps) == 0:
+            raise ValueError("There are no gaps with the size of the current window")
         # Rendering gap sequences
         gapped_sequences = self.genome.bed_to_sequence(gaps)
         # Rendering gap mask
