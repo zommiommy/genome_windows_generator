@@ -8,135 +8,20 @@ import numpy as np
 import pandas as pd
 from math import ceil
 from tqdm.auto import tqdm
-from compress_pickle import dump, load
 from ucsc_genomes_downloader import Genome
 from multiprocessing import Pool, cpu_count
 
-###############################################################################
-# Utils
-###############################################################################
+# Dataset generator Batchsize_scheduler
+#       \                 /
+#         \             /
+#            \        /
+#           Buffer Generator
+#                  |
+#           _buffer_encoder_generator
+#                  |
+#           _generator
+#
 
-def shuffle_equally(*args):
-    indices = np.random.permutation(len(args[-1]), )
-    return [
-        x[indices]
-        for x in args
-    ]
-    
-
-###############################################################################
-# Decorators
-###############################################################################
-def meta_cache_decorator(path_format, load_cache, store_cache):
-    def cache_decorator(f):
-        def wrapped_method(self, *args, **kwargs):
-            path = path_format.format(**{**vars(self), **kwargs})
-            if os.path.exists(path):
-                value = load_cache(path)
-                return value
-            result = f(self, *args, **kwargs)
-            os.makedirs(os.path.split(path)[0], exist_ok=True) 
-            store_cache(result, path)
-            return result
-        return wrapped_method
-    return cache_decorator
-
-def cache_method(path_format):
-    if path_format.endswith(".gz") or path_format.endswith(".pkl"):
-        return meta_cache_decorator(path_format, load, dump)
-    elif path_format.endswith(".csv") or path_format.endswith(".bed"):
-        return meta_cache_decorator(
-            path_format,
-            lambda path: pd.read_csv(path, sep="\t"),
-            lambda result, path: result.to_csv(path, sep="\t", index=False)
-        )
-    else:
-        raise ValueError("The path_format [{}] it's not of a known extension".format(path_format))
-
-
-def multiprocess(f):
-    def wrapped(args):
-        try:
-            return f(*args)
-        except KeyboardInterrupt:
-            pass
-    name = f"multiprocess_decorated_{f.__name__}"
-    wrapped.__name__ = name
-    wrapped.__qualname__ = name
-    globals().update({name:wrapped})
-    return wrapped
-
-###############################################################################
-# Tassellization
-###############################################################################
-
-@multiprocess
-def tasselize_window(chrom:str, chromStart:int, chromEnd:int, window_size:int):
-    return pd.DataFrame([
-        {
-            "chrom":chrom,
-            "chromStart":chromStart + window_size*i,
-            "chromEnd":chromStart + window_size*(i+1),
-        }
-        for i in range((chromEnd -chromStart)//window_size)
-    ])
-
-###############################################################################
-# Noise
-###############################################################################
-
-def one_hot_encode(string):
-    string = string.lower()
-    matrix = np.eye(4)
-    return np.array(matrix[
-        [
-            "actg".find(c)
-            for c in string
-        ]
-    ])
-
-def one_hot_decode(vector, nucleotides="actg"):
-    """Return nucleotides from given distributions."""
-    return "".join([
-        nucleotides[np.argmax(e)]
-        for e in vector
-    ])
-
-def one_hot_encoder(sequences):
-    encoded = np.array([
-        one_hot_encode(sequence)
-        for sequence in sequences
-    ])
-    return encoded, encoded
-
-def apply_noise(mask, sequence, n_type):
-    y = one_hot_encode(sequence)
-    x = np.copy(y)
-    if n_type == "uniform":
-        x[mask] = [0.25] * 4
-    elif n_type == "normal":
-        x[mask] = np.random.normal(size=(4,))
-    else:
-        RuntimeWarning("Unreachable condition, the n_type %s is not valid"%n_type)
-    return x, y
-
-@multiprocess
-def one_hot_noise(seed, sequences, n_type, mean, cov):
-    state = np.random.RandomState()
-    state.seed(seed)
-    distribution = state.multivariate_normal(
-        mean,
-        cov,
-        size=len(sequences)
-    ) > 0.5
-    result = np.array([
-        apply_noise(mask, sequence, n_type)
-        for mask, sequence in zip(distribution, sequences)
-    ])
-    return result[:, 0], result[:, 1]
-###############################################################################
-# Generator
-###############################################################################
 
 class WindowsGenerator:
 
@@ -320,27 +205,3 @@ class WindowsGenerator:
                 "no test chromosomes were specified"
             )
         return self._generator(self._windows_test)
-
-# Dataset generator Batchsize_scheduler
-#       \                 /
-#         \             /
-#            \        /
-#           Buffer Generator
-#                  |
-#           _buffer_encoder_generator
-#                  |
-#           _generator
-#
-
-
-class NoisyWindowsGenerator(WindowsGenerator):
-
-    def _buffer_encoder_generator(self, dataset):
-        for buff_n, buffer in enumerate(self._buffer_generator(dataset)):
-            yield list(self.pool.imap(
-                one_hot_noise,
-                (
-                     (buff_n * self.buffer_size + i, sequences, self.n_type, self._mean, self._cov)
-                    for i, sequences in enumerate(buffer)
-                )
-            ))
