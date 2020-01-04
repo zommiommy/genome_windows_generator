@@ -12,7 +12,7 @@ def one_hot_encode(string):
     ])
 
 def one_hot_decode(vector, nucleotides="actg"):
-    """Return nucleotides from given distributions."""
+    """Return MLE nucleotides from given distributions."""
     return "".join([
         nucleotides[np.argmax(e)]
         for e in vector

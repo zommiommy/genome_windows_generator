@@ -2,7 +2,6 @@ import os
 import pandas as pd
 from compress_pickle import dump, load
 
-
 def meta_cache_decorator(path_format, load_cache, store_cache):
     def cache_decorator(f):
         def wrapped_method(self, *args, **kwargs):

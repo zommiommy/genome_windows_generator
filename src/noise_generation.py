@@ -1,6 +1,8 @@
 
 import numpy as np
 
+from .one_hot import one_hot_encode
+from .decorators import multiprocess
 
 def apply_noise(mask, sequence, n_type):
     y = one_hot_encode(sequence)

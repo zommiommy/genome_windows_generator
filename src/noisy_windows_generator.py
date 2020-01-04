@@ -1,4 +1,6 @@
 
+from .noise_generation import one_hot_noise
+from .windows_generator import WindowsGenerator
 
 class NoisyWindowsGenerator(WindowsGenerator):
 

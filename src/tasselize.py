@@ -1,4 +1,8 @@
 
+import pandas as pd
+
+from .decorators import multiprocess
+
 @multiprocess
 def tasselize_window(chrom:str, chromStart:int, chromEnd:int, window_size:int):
     return pd.DataFrame([

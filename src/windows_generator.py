@@ -11,6 +11,8 @@ from tqdm.auto import tqdm
 from ucsc_genomes_downloader import Genome
 from multiprocessing import Pool, cpu_count
 
+from .decorators import cache_method
+
 # Dataset generator Batchsize_scheduler
 #       \                 /
 #         \             /
