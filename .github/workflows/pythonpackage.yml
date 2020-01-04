@@ -27,7 +27,7 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: /tmp
-        key: ${{ runner.os }}-tmp-${{ hashFiles('**/test/test_windows_generator.txt') }}
+        key: ${{ runner.os }}-tmp-${{ hashFiles('**/tests/test_windows_generator.py') }}
         restore-keys: |
           ${{ runner.os }}-tmp
 
