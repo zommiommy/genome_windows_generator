@@ -1,0 +1,15 @@
+{
+    "description": "Oct. 2003 (SGD/sacCer1)",
+    "nibPath": "/gbdb/sacCer1/nib",
+    "organism": "S. cerevisiae",
+    "defaultPos": "chr13:746300-756100",
+    "active": 1,
+    "orderKey": 19015,
+    "genome": "S. cerevisiae",
+    "scientificName": "Saccharomyces cerevisiae",
+    "htmlPath": "/gbdb/sacCer1/html/description.html",
+    "hgNearOk": 1,
+    "hgPbOk": 0,
+    "sourceName": "SGD sequence data as of 1 Oct. 2003",
+    "taxId": 4932
+}

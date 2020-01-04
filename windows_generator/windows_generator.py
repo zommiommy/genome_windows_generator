@@ -61,7 +61,7 @@ class WindowsGenerator:
         self._cache_directory = "/".join([cache_dir, assembly, str(window_size)]) 
 
         # Generate a pool of processes to save the overhead
-        self.workers = cpu_count()
+        self.workers = max(2, cpu_count())
         self.pool = Pool(self.workers)
 
         # Preprocess all the possible data
