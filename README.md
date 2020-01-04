@@ -1,5 +1,5 @@
 # windows_generator
-https://github.com/zommiommy/windows_generator/workflows/Python%20package/badge.svg
+![](https://github.com/zommiommy/windows_generator/workflows/Python%20package/badge.svg)
 
 ```python
 from windows_generator import WindowsGenerator, NoisyWindowsGenerator
