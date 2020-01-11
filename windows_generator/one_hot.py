@@ -11,13 +11,6 @@ def one_hot_encode(string):
         ]
     ])
 
-def one_hot_decode(vector, nucleotides="actg"):
-    """Return MLE nucleotides from given distributions."""
-    return "".join([
-        nucleotides[np.argmax(e)]
-        for e in vector
-    ])
-
 def one_hot_encoder(sequences):
     encoded = np.array([
         one_hot_encode(sequence)

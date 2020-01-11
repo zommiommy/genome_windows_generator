@@ -2,6 +2,7 @@
 
 import os
 import time
+import shutil
 import random
 import itertools
 import numpy as np
@@ -37,9 +38,11 @@ class WindowsGenerator:
             batch_size,
             buffer_size=None,
             max_gap_size=100,
+            train_chromosomes = [],
             test_chromosomes = [],
             cache_dir=None,
             lazy_load=True,
+            clear_cache=False,
             n_type="uniform"
             ):
         self.assembly, self.window_size = assembly, window_size
@@ -60,6 +63,9 @@ class WindowsGenerator:
 
         self._cache_directory = "/".join([cache_dir, assembly, str(window_size)]) 
 
+        if clear_cache:
+            self.clean_cache()
+
         # Generate a pool of processes to save the overhead
         self.workers = max(2, cpu_count())
         self.pool = Pool(self.workers)
@@ -71,11 +77,15 @@ class WindowsGenerator:
             cache_directory=cache_dir,
         )
 
-        self.chromosomes = sorted(list(self.genome))
+        # If no chromosomes passed then use all the genome 
+        if not train_chromosomes:
+            self.chromosomes = sorted(list(self.genome))
+        else:
+            self.chromosomes = train_chromosomes + test_chromosomes
 
-        assert all((x in self.chromosomes for x in test_chromosomes)), "the chromosomes inside of test_chromosomes must be in {}".format(self.chromosomes)
+        assert all((x in list(self.genome) for x in test_chromosomes)), "the chromosomes inside of test_chromosomes must be in {}".format(list(self.genome))
 
-        filled = self.genome.filled()
+        filled = self.genome.filled(chromosomes=self.chromosomes)
         windows = self._tasselize_windows(filled, window_size)
         sequences = self._encode_sequences(windows)
 
@@ -120,15 +130,13 @@ class WindowsGenerator:
     @cache_method("{_cache_directory}/gap_mask{max_gap_size}.pkl")
     def _render_gaps(self):
         # Compute
-        gaps = self.genome.gaps()
+        gaps = self.genome.gaps(chromosomes=self.chromosomes)
         # Keeping only small gaps
         gaps = gaps[gaps.chromEnd - gaps.chromStart <= self.max_gap_size]
         # Expand windows
-        mid_point = ((gaps.chromEnd + gaps.chromStart)/2).round().astype(int)
-        gaps.chromStart = (mid_point - self.window_size/2).round().astype(int)
-        gaps.chromEnd = (mid_point + self.window_size/2).round().astype(int)
-        if len(gaps) == 0:
-            raise ValueError("There are no gaps with the size of the current window")
+        mid_point = ((gaps.chromEnd + gaps.chromStart)/2).astype(int)
+        gaps.chromStart = (mid_point - self.window_size/2).astype(int)
+        gaps.chromEnd = (mid_point + self.window_size/2).astype(int)
         # Rendering gap sequences
         gapped_sequences = self.genome.bed_to_sequence(gaps)
         # Rendering gap mask
@@ -193,13 +201,9 @@ class WindowsGenerator:
             yield list(self.pool.imap(one_hot_encoder, buffer))
 
     def _generator(self, dataset):
-        try:
-            for buffer in self._buffer_encoder_generator(dataset):
-                for batch in buffer:
-                    yield batch
-        except KeyboardInterrupt:
-            self.pool.terminate()
-            self.pool.join()
+        for buffer in self._buffer_encoder_generator(dataset):
+            for batch in buffer:
+                yield batch
 
     def train(self):
         return self._generator(self._windows_train)
@@ -211,3 +215,12 @@ class WindowsGenerator:
                 "no test chromosomes were specified"
             )
         return self._generator(self._windows_test)
+
+    def clean_cache(self):
+        if os.path.exists(self._cache_directory):
+            shutil.rmtree(self._cache_directory)
+
+    def close(self):
+        if "pool" in vars(self):
+            self.pool.close()
+            self.pool.join()
