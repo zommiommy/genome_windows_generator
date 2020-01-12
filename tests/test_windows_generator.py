@@ -12,7 +12,7 @@ def test_winodws_generator():
         cache_dir="/tmp",
     )
 
-    x, y = next(data_generator.train())
+    next(data_generator.train())
 
     data_generator.close()
 
@@ -25,6 +25,6 @@ def test_winodws_generator():
         cache_dir="/tmp",
     )
 
-    x, y = next(data_generator.train())
+    next(data_generator.test())
 
     data_generator.close()

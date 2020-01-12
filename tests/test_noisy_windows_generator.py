@@ -12,8 +12,8 @@ def test_noisy_windows_generator():
         n_type="uniform"
     )
 
-    x, y = next(data_generator.train())
-    x, y = next(data_generator.test())
+    next(data_generator.train())
+    next(data_generator.test())
 
     print(len(data_generator))
 
@@ -30,8 +30,8 @@ def test_noisy_windows_generator():
         n_type="normal"
     )
 
-    x, y = next(data_generator.train())
-    x, y = next(data_generator.test())
+    next(data_generator.train())
+    next(data_generator.test())
 
     print(len(data_generator))
 
