@@ -1,8 +1,9 @@
 import pytest
 from windows_generator import WindowsGenerator
 
+
 def test_wrong_parameter():
-    
+
     # Test invalid n_type
     with pytest.raises(ValueError):
         WindowsGenerator(

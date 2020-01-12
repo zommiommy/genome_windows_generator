@@ -1,5 +1,4 @@
 import os
-import pandas as pd
 from compress_pickle import dump, load
 
 

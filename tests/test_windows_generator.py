@@ -1,5 +1,6 @@
 from windows_generator import WindowsGenerator
 
+
 def test_winodws_generator():
     data_generator = WindowsGenerator(
         assembly="hg19",

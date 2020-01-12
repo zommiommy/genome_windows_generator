@@ -1,5 +1,6 @@
 from windows_generator import NoisyWindowsGenerator
 
+
 def test_noisy_windows_generator():
     data_generator = NoisyWindowsGenerator(
         assembly="hg19",

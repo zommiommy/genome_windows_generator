@@ -5,7 +5,6 @@ import shutil
 import itertools
 import numpy as np
 import pandas as pd
-from math import ceil
 from tqdm.auto import tqdm
 from ucsc_genomes_downloader import Genome
 from multiprocessing import Pool, cpu_count
@@ -25,6 +24,16 @@ from .tasselize import tasselize_window
 #           _generator
 #
 
+
+def _model_gaps(gap_mask):
+    return np.mean(gap_mask, axis=0), np.cov(gap_mask.T)
+
+
+def _dataset_generator(dataset):
+    while True:
+        np.random.shuffle(dataset)
+        for value in dataset:
+            yield value
 
 class WindowsGenerator:
 
@@ -96,7 +105,7 @@ class WindowsGenerator:
             sequences)
 
         gap_mask = self._render_gaps()
-        self._mean, self._cov = self._model_gaps(gap_mask)
+        self._mean, self._cov = _model_gaps(gap_mask)
 
     def _train_test_split(self, sequences):
         # Get the set of chromosomes
@@ -147,9 +156,6 @@ class WindowsGenerator:
             for sequence in gapped_sequences.sequence
         ])
 
-    def _model_gaps(self, gap_mask):
-        return np.mean(gap_mask, axis=0), np.cov(gap_mask.T),
-
     @cache_method("{_cache_directory}/tasselized.pkl")
     def _tasselize_windows(self, bed: pd.DataFrame, window_size: int):
         # Compute
@@ -182,14 +188,8 @@ class WindowsGenerator:
         while True:
             yield self.batch_size
 
-    def _dataset_generator(self, dataset):
-        while True:
-            np.random.shuffle(dataset)
-            for value in dataset:
-                yield value
-
     def _buffer_generator(self, dataset):
-        iterable = self._dataset_generator(dataset)
+        iterable = _dataset_generator(dataset)
         for batch_size in self.batchsize_scheduler():
             yield [
                 list(itertools.islice(iterable, batch_size))
