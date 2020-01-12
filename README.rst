@@ -21,28 +21,27 @@ Since some software handling coverages sometime get slightly different results, 
 ![](https://github.com/zommiommy/windows_generator/workflows/Python%20package/badge.svg)
 
 
+.. code:: python
 
-```python
-
-from windows_generator import WindowsGenerator, NoisyWindowsGenerator
-
+    from windows_generator import WindowsGenerator, NoisyWindowsGenerator
 
 
-data_generator = NoisyWindowsGenerator(
 
-    assembly="hg19",
+    data_generator = NoisyWindowsGenerator(
 
-    window_size=200,
+        assembly="hg19",
 
-    batch_size=3,
+        window_size=200,
 
-    buffer_size=5,
+        batch_size=3,
 
-    test_chromosomes=["chr1", "chr5"]
+        buffer_size=5,
 
-)
+        test_chromosomes=["chr1", "chr5"]
 
-```
+    )
+
+
 
 
 
@@ -53,22 +52,20 @@ The methods `train, test` returns two independant generator of the train data an
 This is package is mainly meant to be used with `keras`'s `fit_generator`.
 
 
+.. code:: python
 
-```python
+    model.fit_generator(
 
-model.fit_generator(
+        epochs=100,
 
-    epochs=100,
+        steps_per_epoch=len(data_generator),
 
-    steps_per_epoch=len(data_generator),
+        generator=data_generator.train(),
 
-    generator=data_generator.train(),
+        validation_steps=data_generator.test(),
 
-    validation_steps=data_generator.test(),
+    )
 
-)
-
-```
 
 
 .. |travis| image:: https://travis-ci.org/zommiommy/windows_generator.png
