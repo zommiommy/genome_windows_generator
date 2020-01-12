@@ -24,7 +24,7 @@ after_script:
 script:
 - rm -rf .coverage
 - coverage erase
-- pytest --cov=windows_generator --cov-report xml:coverage.xml -S
+- pytest --cov=windows_generator --cov-report xml:coverage.xml -s
 - coverage combine --append || true
 - coverage report
 - coverage xml
