@@ -29,11 +29,11 @@ def find_version(*file_paths):
 __version__ = find_version("windows_generator", "__version__.py")
 
 test_deps =[
-    "codacy-coverage",
-    "pytest",
     "validate_version_code",
+    "codacy-coverage",
     "pytest-cov",
-    "coveralls"
+    "coveralls",
+    "pytest"
 ]
 
 extras = {

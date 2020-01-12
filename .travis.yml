@@ -4,31 +4,35 @@ git:
   depth: false
 addons:
   sonarcloud:
-    organization: "zommiommy-github"
+    organization: zommiommy-github
     token:
       secure: XkXS1b7mavp2koS/IvO2ORpYjh9N4gZ4cTb2iGLdJk9lBtJmaF3Ytcodl/8RTTX7DR+qhU5J/KNeGByxQIsaqeOFQDLUkIpZR56Xxifa/6LC8Xq24Pgp1VM5x8bSknHNKMbYs1Z9MPzONxfPDE11I9XDdFH+ddnK5E0Cqi4syZg0CFNwCFWdAPKRLc2aImzabNBHz75EdBHnr3XAhc7VjkKaO7MqLe68sqQDEBuQNc63CebpEX0RzEtTMTxLBvG3vQutgJw6OI+qMg7vofKte9LZA9lFM6POUFHdGpSZLZkjkoTozVSXL+WKv5f1tDRuLMA6Qor2pTuwQZoEOGUKcLXYsXcXrLxy4hv3xT1HX8AMCtEDOz96tyeB+h1QlgKOQC+PEXdXN02BQnMPX1M+B2RnQEl3Zo5JdusiffWJ7NeuLUltA7RyHIU/9L92SMGzijmo5d/JQlx2zgb0FaotihfScGo/6BITtn/AhWDtOviAaN2OL62x9RS6qab16ekOs4a1VMfxAhvRxuLKxZXyjXjtBkfLhq35wNOdIe54uH3ReDi8Gc+AXlfPrLQitUx8tg8HcLv+QJVP36l8xeckpI7gQiX8tlZVBBszmQ8X9bLCSk5Xdp2DDtnTdKaXpUIl3Rkv5p4cSYu9vT5xmtxSmJRRAelXFnADwPv6ded9QzU=
 language: python
 python:
 - '3.7'
 before_install:
-  - pip install --upgrade pytest
+- pip install --upgrade pytest
 install:
 - pip install .[test]
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+  > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
 script:
 - rm -rf .coverage
 - coverage erase
-- pytest --cov=windows_generator --cov-report xml:coverage.xml 
+- pytest --cov=windows_generator --cov-report xml:coverage.xml
 - coverage combine --append || true
 - coverage report
 - coverage xml
-- 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
-
+- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi
 after_success:
-  - coveralls
-  - python-codacy-coverage -r coverage.xml
+- coveralls
+- python-codacy-coverage -r coverage.xml
+env:
+  global:
+  - secure: mwFPhEHRdAqGjG7PR3l+awGkhJh9DQjZHSY4+h6V6TuDTiazFAOyjlORyTBdBu/QzJh3upl9TRW+B6siA3kigBD1zX3xvhGpIhd1zTCn1Y8QEN10wiljYn+klMWdkRWESdZZTa6tpsgjtdT5q9uKklIjGVNjmEYFuS0sDhiOh4D+2qiG1PUUoC4QF80JN7fq8tA0Gv7Q+H5MbCCXJLP3GUWoj4uv9n3jjlZgTIgdXA4X3qJ+hijv4mJVqhCkuZx4RuF+C6cUga6B4kRIZ+P7BILBGImRt1Hwexh9txnY9SG4SMRIsJoaccQ5nWMWgqZXuhj62PToB409CI+OYy4KgFih62peFbrwruijvPrpXENhSNyswHWxYnyqY3b1Oh1YdXWHzsaDhLOh9+jVUYGdjSX3FOw4OH7QSAGuKG8Wlchz9raju7si+H/QbQW1C27KcXSit2kEu0nmn9nioiq1TM67o7vmX1pyAbi37j7+trnfvkmwhJ00RP44jsR91zxfREnb1JZ7Xxzuz+YTtxEA9zV0/jJaMx2J7/eD2S/cv8BLnoEN/cqMy9+44FrGiTG3aBxwjBvqFRr6Qif2aSTIJJExoRH57DnyRgsh5GwGWtRoam1m6UR/kXUupVy5cBjd+sdon9Fnb96g8oJn4sicfHYC2kacv3Dna1fOvCSsHas=
+  - secure: V3qu8deIV/JTAqaAl3ACcmjkag0Eyw0484JdAxzHml3O5XKQxn0Me4QPt2jDlENCiADTohykbeUrpuMtKCaaeWvMfnU9j+4pNh7COzk4j/Ds5JsGmv+XdK9n8LkNSNuLTEPjCZZSmGHMZ6fm1QiijTnn66KUc7FwvvLsfsmlgU19KIOF67w0nEdeSGKnm6dNSzR/t/1pMpnUFP96/S7phQPW3VGQ5eU3hvjC7NpQduie9Nt+ClemMXGgeFUxsaOz6wu8LyB5EB+w8z5Ntk0TammRVp4bXqpCQza+ER2qwolWjTAzSHPfbGQ3SYLH8poQsW57ujxHUxBX0F2cKfjFQEeJvWUmFNy7+jKHmvJ+IgbFVqhLf3cvi201gZNLSTT6RcQOUtz0DAGgzf5Uu41OVhcOpNm6CaJ/oqQerN16oQgaLCDKHtBTKmvDmyAPIlDgkKHU8+W+YSJGcStQ+1uMqDbkTlqFKB1BB2lDU0E7XUOdpnTayfYx9KDpoy8WNgggp+sesPisIP1ENZM3IJZdBDDU5pc4LshCjMMbuv6D/ffw1GnvuOJfEo4Rna0SXdlKNshxWjDUa8PH5KKFip3YfjzAxW+NSpXCsG5Ae9m/etjnuE2gvbTEuwZaTeVVI7sa+jhXmMwYu2SVfwhy/K1HIqoiZ4XcbmUb7JrwC41wzPw=
