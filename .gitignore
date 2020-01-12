@@ -1,113 +1,113 @@
-# Unit test / coverage reports
-.tox/
-__pycache__/
-.spyderproject
-profile_default/
-docs/_build/
-.coverage.*
-# Django stuff:
-.installed.cfg
-# mkdocs documentation
-celerybeat-schedule
-*.cover
-.cache
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-.coverage*
-db.sqlite3-journal
-dmypy.json
-*.py,cover
-*.egg-info/
-*.manifest
-eggs/
-# Jupyter Notebook
-# IPython
-instance/
-\.vscode/
-*$py.class
-# Environments
-# Scrapy stuff:
-env.bak/
-.dmypy.json
-.env
-.python-version
-#Pipfile.lock
-parts/
-share/python-wheels/
-sdist/
-*.spec
-lib/
-__pypackages__/
-.mypy_cache/
-.ipynb_checkpoints
-celerybeat.pid
-.pytest_cache/
-pip-wheel-metadata/
-*.log
-\.DS_Store
-# Distribution / packaging
-.coverage
-*.mo
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-# mypy
-.notipy.json
-.webassets-cache
-# SageMath parsed files
-wheels/
-venv.bak/
-.venv
-# Rope project settings
-# pyenv
-*.sage.py
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-# Installer logs
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-# Translations
-.eggs/
-*.pot
-venv/
-lib64/
-# pipenv
-.spyproject
-.ropeproject
-downloads/
-.hypothesis/
-# Pyre type checker
-ipython_config.py
-MANIFEST
-.Python
-local_settings.py
-.nox/
-#   install all needed dependencies.
-build/
-env/
-*.egg
-/site
-ENV/
-**/__pycache__/*
-# PyInstaller
-# Byte-compiled / optimized / DLL files
-pip-log.txt
-*.py[cod]
-# Celery stuff
-db.sqlite3
 nosetests.xml
-# C extensions
-# Flask stuff:
-dist/
-develop-eggs/
-__pycache__
-#  Usually these files are written by a python script from a template
-target/
-# Spyder project settings
-coverage.xml
-.pyre/
-.scrapy
-var/
-# PyBuilder
-htmlcov/
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-pip-delete-this-directory.txt
-.single_run
+sdist/
+.ipynb_checkpoints
+.tox/
+instance/
+.env
 # Sphinx documentation
-*/__pycache__/*
+\.DS_Store
 # *.so
+# mypy
+# Django stuff:
+__pypackages__/
+.eggs/
+downloads/
+# Installer logs
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+.coverage.*
+pip-delete-this-directory.txt
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.py[cod]
+__pycache__
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+# Flask stuff:
+.venv
+*/__pycache__/*
+parts/
+celerybeat.pid
+.coverage
+target/
+.pytest_cache/
+.coverage*
+# pyenv
+venv.bak/
+# PyBuilder
+.notipy.json
+\.vscode/
+ENV/
+# Scrapy stuff:
+.spyproject
+# C extensions
+celerybeat-schedule
+# Unit test / coverage reports
+# Translations
+# PyInstaller
+.pyre/
+ipython_config.py
+pip-log.txt
+# Jupyter Notebook
+# Celery stuff
+env/
+lib64/
+profile_default/
+#Pipfile.lock
+eggs/
+# Byte-compiled / optimized / DLL files
+htmlcov/
+.spyderproject
+.mypy_cache/
+.scrapy
+/site
+*.manifest
+*.sage.py
+.dmypy.json
+#  Usually these files are written by a python script from a template
+docs/_build/
+*.pot
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+# Pyre type checker
+*.py,cover
+.webassets-cache
+build/
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+var/
+.nox/
+MANIFEST
+*.egg
+*.spec
+.Python
+.hypothesis/
+*.cover
+local_settings.py
+dist/
+# pipenv
+*.egg-info/
+# Rope project settings
+# Environments
+develop-eggs/
+dmypy.json
+pip-wheel-metadata/
+__pycache__/
+lib/
+wheels/
+share/python-wheels/
+coverage.xml
+env.bak/
+.ropeproject
+# mkdocs documentation
+# Spyder project settings
+.python-version
+db.sqlite3-journal
+.single_run
+*.log
+# IPython
+#   install all needed dependencies.
+db.sqlite3
+.cache
+*.mo
+venv/
+*$py.class
+.installed.cfg
+# SageMath parsed files
+# Distribution / packaging
+**/__pycache__/*
