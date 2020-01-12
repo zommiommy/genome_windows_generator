@@ -1,6 +1,7 @@
 
 import numpy as np
 
+
 def one_hot_encode(string):
     string = string.lower()
     matrix = np.eye(4)
@@ -10,6 +11,7 @@ def one_hot_encode(string):
             for c in string
         ]
     ])
+
 
 def one_hot_encoder(sequences):
     encoded = np.array([

@@ -1,9 +1,7 @@
 
 
 import os
-import time
 import shutil
-import random
 import itertools
 import numpy as np
 import pandas as pd
@@ -32,19 +30,19 @@ class WindowsGenerator:
 
     n_types = ["uniform", "normal"]
 
-    def __init__(self, 
-            assembly,
-            window_size,
-            batch_size,
-            buffer_size=None,
-            max_gap_size=100,
-            train_chromosomes = [],
-            test_chromosomes = [],
-            cache_dir=None,
-            lazy_load=True,
-            clear_cache=False,
-            n_type="uniform"
-            ):
+    def __init__(self,
+                 assembly,
+                 window_size,
+                 batch_size,
+                 buffer_size=None,
+                 max_gap_size=100,
+                 train_chromosomes=None,
+                 test_chromosomes=None,
+                 cache_dir=None,
+                 lazy_load=True,
+                 clear_cache=False,
+                 n_type="uniform"
+                 ):
         self.assembly, self.window_size = assembly, window_size
         self.max_gap_size, self.batch_size, self.test_chromosomes = max_gap_size, batch_size, test_chromosomes
 
@@ -55,13 +53,14 @@ class WindowsGenerator:
 
         # Validate the type of N
         if n_type not in self.n_types:
-            raise ValueError("n_type must be one of %s"%n_type)
+            raise ValueError("n_type must be one of %s" % n_type)
         self.n_type = n_type
 
         # Get the cache dir
         cache_dir = cache_dir or os.environ.get("CACHE_PATH", None) or "/tmp"
 
-        self._cache_directory = "/".join([cache_dir, assembly, str(window_size)]) 
+        self._cache_directory = "/".join([cache_dir,
+                                          assembly, str(window_size)])
 
         if clear_cache:
             self.clean_cache()
@@ -77,19 +76,24 @@ class WindowsGenerator:
             cache_directory=cache_dir,
         )
 
-        # If no chromosomes passed then use all the genome 
+        # If no chromosomes passed then use all the genome
         if not train_chromosomes:
             self.chromosomes = sorted(list(self.genome))
         else:
             self.chromosomes = train_chromosomes + test_chromosomes
 
-        assert all((x in list(self.genome) for x in test_chromosomes)), "the chromosomes inside of test_chromosomes must be in {}".format(list(self.genome))
+        if not test_chromosomes:
+            test_chromosomes = []
+
+        assert all((x in list(self.genome) for x in test_chromosomes)
+                   ), "the chromosomes inside of test_chromosomes must be in {}".format(list(self.genome))
 
         filled = self.genome.filled(chromosomes=self.chromosomes)
         windows = self._tasselize_windows(filled, window_size)
         sequences = self._encode_sequences(windows)
 
-        self._windows_train, self._windows_test = self._train_test_split(sequences)
+        self._windows_train, self._windows_test = self._train_test_split(
+            sequences)
 
         gap_mask = self._render_gaps()
         self._mean, self._cov = self._model_gaps(gap_mask)
@@ -97,7 +101,7 @@ class WindowsGenerator:
     def _train_test_split(self, sequences):
         # Get the set of chromosomes
         # TODO do we need a seed here?
-        # Find the splitting index  
+        # Find the splitting index
         windows_train = sum(
             [
                 sequences[chrom].sequence.tolist()
@@ -107,8 +111,7 @@ class WindowsGenerator:
                     leave=False
                 )
                 if chrom not in self.test_chromosomes
-            ]
-            , []
+            ], []
         )
         windows_test = sum(
             (
@@ -119,8 +122,7 @@ class WindowsGenerator:
                     leave=False
                 )
                 if chrom in self.test_chromosomes
-            )
-            , []
+            ), []
         )
         return windows_train, windows_test
 
@@ -148,9 +150,8 @@ class WindowsGenerator:
     def _model_gaps(self, gap_mask):
         return np.mean(gap_mask, axis=0), np.cov(gap_mask.T),
 
-
     @cache_method("{_cache_directory}/tasselized.pkl")
-    def _tasselize_windows(self, bed:pd.DataFrame, window_size:int):
+    def _tasselize_windows(self, bed: pd.DataFrame, window_size: int):
         # Compute
         tasks = (
             (row.chrom, row.chromStart, row.chromEnd, window_size)
@@ -166,10 +167,10 @@ class WindowsGenerator:
     @cache_method("{_cache_directory}/encoded_seq_{max_gap_size}_{chrom}.pkl")
     def _parse_sequence(self, windows, chrom):
         return self.genome.bed_to_sequence(windows)
-        
+
     def _encode_sequences(self, windows):
         return {
-            chrom:self._parse_sequence(window, chrom=chrom)
+            chrom: self._parse_sequence(window, chrom=chrom)
             for chrom, window in tqdm(
                 windows.groupby("chrom"),
                 desc="Loading the sequences for chromosomes",
@@ -186,7 +187,6 @@ class WindowsGenerator:
             np.random.shuffle(dataset)
             for value in dataset:
                 yield value
-
 
     def _buffer_generator(self, dataset):
         iterable = self._dataset_generator(dataset)
@@ -207,9 +207,9 @@ class WindowsGenerator:
 
     def train(self):
         return self._generator(self._windows_train)
-        
+
     def test(self):
-        if not self.test_chromosomes: 
+        if not self.test_chromosomes:
             raise ValueError(
                 "Can't return the test generator since "
                 "no test chromosomes were specified"
