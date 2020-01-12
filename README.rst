@@ -2,8 +2,6 @@ windows_generator
 =========================================================================================
 |travis| |sonar_quality| |sonar_maintainability| |codacy| |code_climate_maintainability| |pip| |downloads|
 
-![](https://github.com/zommiommy/windows_generator/workflows/Python%20package/badge.svg)
-
 How do I install this package?
 ----------------------------------------------
 As usual, just download it using pip:
@@ -18,27 +16,17 @@ Since some software handling coverages sometime get slightly different results, 
 
 |coveralls| |sonar_coverage| |code_climate_coverage|
 
-![](https://github.com/zommiommy/windows_generator/workflows/Python%20package/badge.svg)
-
 
 .. code:: python
 
     from windows_generator import WindowsGenerator, NoisyWindowsGenerator
 
-
-
     data_generator = NoisyWindowsGenerator(
-
         assembly="hg19",
-
         window_size=200,
-
         batch_size=3,
-
         buffer_size=5,
-
         test_chromosomes=["chr1", "chr5"]
-
     )
 
 
@@ -55,15 +43,10 @@ This is package is mainly meant to be used with `keras`'s `fit_generator`.
 .. code:: python
 
     model.fit_generator(
-
         epochs=100,
-
         steps_per_epoch=len(data_generator),
-
         generator=data_generator.train(),
-
         validation_steps=data_generator.test(),
-
     )
 
 
