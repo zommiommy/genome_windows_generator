@@ -1,9 +1,9 @@
 
 from .noise_generation import one_hot_noise
-from .windows_generator import WindowsGenerator
+from .genome_windows_generator import GenomeWindowsGenerator
 
 
-class NoisyWindowsGenerator(WindowsGenerator):
+class NoisyWindowsGenerator(GenomeWindowsGenerator):
 
     def _buffer_encoder_generator(self, dataset):
         for buff_n, buffer in enumerate(self._buffer_generator(dataset)):

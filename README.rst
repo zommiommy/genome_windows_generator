@@ -1,4 +1,4 @@
-windows_generator
+genome_windows_generator
 =========================================================================================
 |travis| |sonar_quality| |sonar_maintainability| |codacy| |code_climate_maintainability| |pip| |downloads|
 
@@ -8,7 +8,7 @@ As usual, just download it using pip:
 
 .. code:: shell
 
-    pip install windows_generator
+    pip install genome_windows_generator
 
 Tests Coverage
 ----------------------------------------------
@@ -19,7 +19,7 @@ Since some software handling coverages sometime get slightly different results, 
 
 .. code:: python
 
-    from windows_generator import WindowsGenerator, NoisyWindowsGenerator
+    from genome_windows_generator import GenomeWindowsGenerator, NoisyWindowsGenerator
 
     data_generator = NoisyWindowsGenerator(
         assembly="hg19",
@@ -51,42 +51,42 @@ This is package is mainly meant to be used with `keras`'s `fit_generator`.
 
 
 
-.. |travis| image:: https://travis-ci.org/zommiommy/windows_generator.png
-   :target: https://travis-ci.org/zommiommy/windows_generator
+.. |travis| image:: https://travis-ci.org/zommiommy/genome_windows_generator.png
+   :target: https://travis-ci.org/zommiommy/genome_windows_generator
    :alt: Travis CI build
 
-.. |sonar_quality| image:: https://sonarcloud.io/api/project_badges/measure?project=zommiommy_windows_generator&metric=alert_status
-    :target: https://sonarcloud.io/dashboard/index/zommiommy_windows_generator
+.. |sonar_quality| image:: https://sonarcloud.io/api/project_badges/measure?project=zommiommy_genome_windows_generator&metric=alert_status
+    :target: https://sonarcloud.io/dashboard/index/zommiommy_genome_windows_generator
     :alt: SonarCloud Quality
 
-.. |sonar_maintainability| image:: https://sonarcloud.io/api/project_badges/measure?project=zommiommy_windows_generator&metric=sqale_rating
-    :target: https://sonarcloud.io/dashboard/index/zommiommy_windows_generator
+.. |sonar_maintainability| image:: https://sonarcloud.io/api/project_badges/measure?project=zommiommy_genome_windows_generator&metric=sqale_rating
+    :target: https://sonarcloud.io/dashboard/index/zommiommy_genome_windows_generator
     :alt: SonarCloud Maintainability
 
-.. |sonar_coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=zommiommy_windows_generator&metric=coverage
-    :target: https://sonarcloud.io/dashboard/index/zommiommy_windows_generator
+.. |sonar_coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=zommiommy_genome_windows_generator&metric=coverage
+    :target: https://sonarcloud.io/dashboard/index/zommiommy_genome_windows_generator
     :alt: SonarCloud Coverage
 
-.. |coveralls| image:: https://coveralls.io/repos/github/zommiommy/windows_generator/badge.svg?branch=master
-    :target: https://coveralls.io/github/zommiommy/windows_generator?branch=master
+.. |coveralls| image:: https://coveralls.io/repos/github/zommiommy/genome_windows_generator/badge.svg?branch=master
+    :target: https://coveralls.io/github/zommiommy/genome_windows_generator?branch=master
     :alt: Coveralls Coverage
 
-.. |pip| image:: https://badge.fury.io/py/windows_generator.svg
-    :target: https://badge.fury.io/py/windows_generator
+.. |pip| image:: https://badge.fury.io/py/genome_windows_generator.svg
+    :target: https://badge.fury.io/py/genome_windows_generator
     :alt: Pypi project
 
-.. |downloads| image:: https://pepy.tech/badge/windows_generator
-    :target: https://pepy.tech/badge/windows_generator
+.. |downloads| image:: https://pepy.tech/badge/genome_windows_generator
+    :target: https://pepy.tech/badge/genome_windows_generator
     :alt: Pypi total project downloads 
 
 .. |codacy|  image:: https://api.codacy.com/project/badge/Grade/8dd7ef7604084ded82ae70acddc16264
-    :target: https://www.codacy.com/manual/zommiommy/windows_generator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zommiommy/windows_generator&amp;utm_campaign=Badge_Grade
+    :target: https://www.codacy.com/manual/zommiommy/genome_windows_generator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zommiommy/genome_windows_generator&amp;utm_campaign=Badge_Grade
     :alt: Codacy Maintainability
 
 .. |code_climate_maintainability| image:: https://api.codeclimate.com/v1/badges/4e850c49fac5b73cab29/maintainability
-    :target: https://codeclimate.com/github/zommiommy/windows_generator/maintainability
+    :target: https://codeclimate.com/github/zommiommy/genome_windows_generator/maintainability
     :alt: Maintainability
 
 .. |code_climate_coverage| image:: https://api.codeclimate.com/v1/badges/4e850c49fac5b73cab29/test_coverage
-    :target: https://codeclimate.com/github/zommiommy/windows_generator/test_coverage
+    :target: https://codeclimate.com/github/zommiommy/genome_windows_generator/test_coverage
     :alt: Code Climate Coverate

@@ -1,5 +1,5 @@
 import pytest
-from windows_generator import WindowsGenerator
+from genome_windows_generator import WindowsGenerator
 
 
 def test_wrong_parameter():

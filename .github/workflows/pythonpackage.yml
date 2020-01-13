@@ -29,7 +29,7 @@ jobs:
       name: Cache genome files
       with:
         path: /tmp
-        key: ${{ runner.os }}-tmp-${{ hashFiles('**/tests/test_windows_generator.py') }}
+        key: ${{ runner.os }}-tmp-${{ hashFiles('**/tests/test_genome_windows_generator.py') }}
         restore-keys: |
           ${{ runner.os }}-tmp
 

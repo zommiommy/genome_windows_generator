@@ -35,7 +35,7 @@ def _dataset_generator(dataset):
         for value in dataset:
             yield value
 
-class WindowsGenerator:
+class GenomeWindowsGenerator:
 
     n_types = ["uniform", "normal"]
 

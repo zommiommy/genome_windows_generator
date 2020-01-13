@@ -26,7 +26,7 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-__version__ = find_version("windows_generator", "__version__.py")
+__version__ = find_version("genome_windows_generator", "__version__.py")
 
 test_deps =[
     "validate_version_code",
@@ -41,11 +41,11 @@ extras = {
 }
 
 setup(
-    name='windows_generator',
+    name='genome_windows_generator',
     version=__version__,
-    description="![](https://github.com/zommiommy/windows_generator/workflows/Python%20package/badge.svg)",
+    description="![](https://github.com/zommiommy/genome_windows_generator/workflows/Python%20package/badge.svg)",
     long_description=long_description,
-    url="https://github.com/zommiommy/windows_generator",
+    url="https://github.com/zommiommy/genome_windows_generator",
     author="Tommaso Fontana",
     author_email="tommaso.fontana.96@gmail.com",
     # Choose your license
