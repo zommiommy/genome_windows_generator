@@ -1,12 +1,12 @@
 import pytest
-from genome_windows_generator import WindowsGenerator
+from genome_windows_generator import GenomeWindowsGenerator
 
 
 def test_wrong_parameter():
 
     # Test invalid n_type
     with pytest.raises(ValueError):
-        WindowsGenerator(
+        GenomeWindowsGenerator(
             assembly="hg19",
             window_size=200,
             batch_size=3,
@@ -20,7 +20,7 @@ def test_wrong_parameter():
 
     # Test too big windows
     with pytest.raises(ValueError):
-        WindowsGenerator(
+        GenomeWindowsGenerator(
             assembly="hg19",
             window_size=200,
             batch_size=3,

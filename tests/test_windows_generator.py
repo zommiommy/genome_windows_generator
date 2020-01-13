@@ -1,8 +1,8 @@
-from genome_windows_generator import WindowsGenerator
+from genome_windows_generator import GenomeWindowsGenerator
 
 
 def test_winodws_generator():
-    data_generator = WindowsGenerator(
+    data_generator = GenomeWindowsGenerator(
         assembly="hg19",
         window_size=200,
         batch_size=3,
@@ -17,7 +17,7 @@ def test_winodws_generator():
 
     data_generator.close()
 
-    data_generator = WindowsGenerator(
+    data_generator = GenomeWindowsGenerator(
         assembly="hg19",
         window_size=200,
         batch_size=3,
