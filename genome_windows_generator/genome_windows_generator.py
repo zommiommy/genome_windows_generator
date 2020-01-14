@@ -6,6 +6,7 @@ import itertools
 import numpy as np
 import pandas as pd
 from tqdm.auto import tqdm
+from dict_hash import sha256
 from ucsc_genomes_downloader import Genome
 from multiprocessing import Pool, cpu_count
 
@@ -35,6 +36,7 @@ def _dataset_generator(dataset):
         for value in dataset:
             yield value
 
+
 class GenomeWindowsGenerator:
 
     n_types = ["uniform", "normal"]
@@ -50,6 +52,7 @@ class GenomeWindowsGenerator:
                  cache_dir=None,
                  lazy_load=True,
                  clear_cache=False,
+                 compile_on_start=True,
                  n_type="uniform"
                  ):
         self.assembly, self.window_size = assembly, window_size
@@ -85,20 +88,31 @@ class GenomeWindowsGenerator:
             cache_directory=cache_dir,
         )
 
+        if not test_chromosomes:
+            self.test_chromosomes = []
+
         # If no chromosomes passed then use all the genome
         if not train_chromosomes:
             self.chromosomes = sorted(list(self.genome))
         else:
-            self.chromosomes = train_chromosomes + test_chromosomes
+            self.chromosomes = train_chromosomes + self.test_chromosomes
 
-        if not test_chromosomes:
-            test_chromosomes = []
+        self.instance_hash = sha256(
+            {
+                "assembly":self.assembly,
+                "chromosomes":self.chromosomes,
+                "window_size":self.window_size,
+                "max_gap_size":self.max_gap_size,
+                "n_type":n_type,
+            }
+        )
 
-        assert all((x in list(self.genome) for x in test_chromosomes)
-                   ), "the chromosomes inside of test_chromosomes must be in {}".format(list(self.genome))
+        if compile_on_start:
+            self.compile()
 
+    def compile(self):
         filled = self.genome.filled(chromosomes=self.chromosomes)
-        windows = self._tasselize_windows(filled, window_size)
+        windows = self._tasselize_windows(filled, self.window_size)
         sequences = self._encode_sequences(windows)
 
         self._windows_train, self._windows_test = self._train_test_split(
@@ -138,7 +152,7 @@ class GenomeWindowsGenerator:
     def __len__(self):
         return len(self._windows_train) // self.batch_size
 
-    @cache_method("{_cache_directory}/gap_mask{max_gap_size}.pkl")
+    @cache_method("{_cache_directory}/{instance_hash}_gap_mask.pkl")
     def _render_gaps(self):
         # Compute
         gaps = self.genome.gaps(chromosomes=self.chromosomes)
@@ -156,7 +170,7 @@ class GenomeWindowsGenerator:
             for sequence in gapped_sequences.sequence
         ])
 
-    @cache_method("{_cache_directory}/tasselized.pkl")
+    @cache_method("{_cache_directory}/{instance_hash}_tasselized.pkl")
     def _tasselize_windows(self, bed: pd.DataFrame, window_size: int):
         # Compute
         tasks = (
@@ -170,18 +184,12 @@ class GenomeWindowsGenerator:
             leave=False
         )))
 
-    @cache_method("{_cache_directory}/encoded_seq_{max_gap_size}_{chrom}.pkl")
-    def _parse_sequence(self, windows, chrom):
-        return self.genome.bed_to_sequence(windows)
-
+    @cache_method("{_cache_directory}/{instance_hash}_sequences.pkl")
     def _encode_sequences(self, windows):
+        bed = self.genome.bed_to_sequence(windows)
         return {
-            chrom: self._parse_sequence(window, chrom=chrom)
-            for chrom, window in tqdm(
-                windows.groupby("chrom"),
-                desc="Loading the sequences for chromosomes",
-                leave=False
-            )
+            chrom: data
+            for chrom, data in bed.groupby("chrom")
         }
 
     def batchsize_scheduler(self):

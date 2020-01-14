@@ -64,7 +64,8 @@ setup(
         "numpy",
         "pandas",
         "tqdm",
-        "ucsc-genomes-downloader"
+        "ucsc-genomes-downloader",
+        "dict_hash"
         ],
     extras_require=extras,
 )
