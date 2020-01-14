@@ -7,7 +7,6 @@ def cache_method(path_format):
         def wrapped_method(self, *args, **kwargs):
             path = path_format.format(**{**vars(self), **kwargs})
             if os.path.exists(path):
-                print(f"loading {path}")
                 value = load(path)
                 return value
             result = f(self, *args, **kwargs)
