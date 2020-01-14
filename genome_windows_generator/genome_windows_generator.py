@@ -111,7 +111,7 @@ class GenomeWindowsGenerator:
             self.compile()
 
     def compile(self):
-        filled = self.genome.filled(chromosomes=self.chromosomes)
+        filled = self._filled()
         windows = self._tasselize_windows(filled, self.window_size)
         sequences = self._encode_sequences(windows)
 
@@ -130,7 +130,7 @@ class GenomeWindowsGenerator:
                 sequences[chrom].sequence.tolist()
                 for chrom in tqdm(
                     self.chromosomes,
-                    desc="Gropping Train windows",
+                    desc="Groupping Train windows",
                     leave=False
                 )
                 if chrom not in self.test_chromosomes
@@ -141,7 +141,7 @@ class GenomeWindowsGenerator:
                 sequences[chrom].sequence.tolist()
                 for chrom in tqdm(
                     self.chromosomes,
-                    desc="Gropping Test windows",
+                    desc="Groupping Test windows",
                     leave=False
                 )
                 if chrom in self.test_chromosomes
@@ -151,6 +151,10 @@ class GenomeWindowsGenerator:
 
     def __len__(self):
         return len(self._windows_train) // self.batch_size
+
+    @cache_method("{_cache_directory}/{instance_hash}_filled.pkl")
+    def _filled(self):
+        return self.genome.filled(chromosomes=self.chromosomes)
 
     @cache_method("{_cache_directory}/{instance_hash}_gap_mask.pkl")
     def _render_gaps(self):

@@ -6,6 +6,9 @@ install:
 test:
 	~/anaconda3/bin/pytest -s --cov genome_windows_generator --cov-report html
 
-publish:
+build:
 	~/anaconda3/bin/python setup.py sdist
-	~/anaconda3/bin/twine upload $PATH
+
+publish:
+	echo "Uploading ./dist/$$(ls ./dist | grep .tar.gz | sort | tail -n 1)"
+	twine upload "./dist/$$(ls ./dist | grep .tar.gz | sort | tail -n 1)"
