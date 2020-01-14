@@ -67,8 +67,8 @@ This is package is mainly meant to be used with `keras`'s `fit_generator`.
     :target: https://sonarcloud.io/dashboard/index/zommiommy_genome_windows_generator
     :alt: SonarCloud Coverage
 
-.. |coveralls| image:: https://coveralls.io/repos/github/zommiommy/genome_windows_generator/badge.svg?branch=master
-    :target: https://coveralls.io/github/zommiommy/genome_windows_generator?branch=master
+.. |coveralls| .. image:: https://coveralls.io/repos/github/zommiommy/genome_windows_generator/badge.svg
+    :target: https://coveralls.io/github/zommiommy/genome_windows_generator
     :alt: Coveralls Coverage
 
 .. |pip| image:: https://badge.fury.io/py/genome_windows_generator.svg
