@@ -71,12 +71,12 @@ This is package is mainly meant to be used with `keras`'s `fit_generator`.
     :target: https://coveralls.io/github/zommiommy/genome_windows_generator
     :alt: Coveralls Coverage
 
-.. |pip| image:: https://badge.fury.io/py/genome_windows_generator.svg
-    :target: https://badge.fury.io/py/genome_windows_generator
+.. |pip| image:: https://badge.fury.io/py/genome-windows-generator.svg
+    :target: https://badge.fury.io/py/genome-windows-generator
     :alt: Pypi project
 
-.. |downloads| image:: https://pepy.tech/badge/genome_windows_generator
-    :target: https://pepy.tech/badge/genome_windows_generator
+.. |downloads| image:: https://pepy.tech/badge/genome-windows-generator
+    :target: https://pepy.tech/badge/genome-windows-generator
     :alt: Pypi total project downloads 
 
 .. |codacy|  image:: https://api.codacy.com/project/badge/Grade/8dd7ef7604084ded82ae70acddc16264
