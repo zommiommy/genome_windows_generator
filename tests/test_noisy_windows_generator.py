@@ -8,7 +8,7 @@ def test_noisy_genome_windows_generator():
         batch_size=3,
         buffer_size=5,
         train_chromosomes=["chr1"],
-        test_chromosomes=["chr2"],
+        val_chromosomes=["chr2"],
         cache_dir="/tmp",
         n_type="uniform"
     )
@@ -27,7 +27,7 @@ def test_noisy_genome_windows_generator():
         batch_size=3,
         buffer_size=5,
         train_chromosomes=["chr1"],
-        test_chromosomes=["chr2"],
+        val_chromosomes=["chr2"],
         cache_dir="/tmp",
         n_type="normal"
     )
