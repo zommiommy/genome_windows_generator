@@ -13,10 +13,11 @@ def test_noisy_genome_windows_generator():
         n_type="uniform"
     )
 
-    next(data_generator.train())
-    next(data_generator.test())
+    next(data_generator.generator())
+    next(data_generator.validation_data())
 
-    print(len(data_generator))
+    print(data_generator.steps_per_epoch())
+    print(data_generator.validation_steps())
 
     data_generator.close()
 
@@ -30,10 +31,5 @@ def test_noisy_genome_windows_generator():
         cache_dir="/tmp",
         n_type="normal"
     )
-
-    next(data_generator.train())
-    next(data_generator.test())
-
-    print(len(data_generator))
 
     data_generator.close()

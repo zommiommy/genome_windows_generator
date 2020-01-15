@@ -21,7 +21,7 @@ Since some software handling coverages sometime get slightly different results, 
 
     from genome_windows_generator import GenomeWindowsGenerator, NoisyWindowsGenerator
 
-    data_generator = NoisyWindowsGenerator(
+    dg = NoisyWindowsGenerator(
         assembly="hg19",
         window_size=200,
         batch_size=3,
@@ -44,9 +44,10 @@ This is package is mainly meant to be used with `keras`'s `fit_generator`.
 
     model.fit_generator(
         epochs=100,
-        steps_per_epoch=len(data_generator),
-        generator=data_generator.train(),
-        validation_steps=data_generator.test(),
+        generator=dg.generator(),
+        steps_per_epoch=dg.steps_per_epoch(),
+        validation_data=dg.validation_data(),
+        validation_steps=dg.validation_steps(),
     )
 
 

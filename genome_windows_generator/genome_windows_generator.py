@@ -48,7 +48,7 @@ class GenomeWindowsGenerator:
                  buffer_size=None,
                  max_gap_size=100,
                  train_chromosomes=None,
-                 test_chromosomes=None,
+                 val_chromosomes=None,
                  cache_dir=None,
                  lazy_load=True,
                  clear_cache=False,
@@ -56,7 +56,7 @@ class GenomeWindowsGenerator:
                  n_type="uniform"
                  ):
         self.assembly, self.window_size = assembly, window_size
-        self.max_gap_size, self.batch_size, self.test_chromosomes = max_gap_size, batch_size, test_chromosomes
+        self.max_gap_size, self.batch_size, self.val_chromosomes = max_gap_size, batch_size, val_chromosomes
 
         # Buffersize default None == cpu count for optimal performance:
         if not buffer_size:
@@ -88,14 +88,14 @@ class GenomeWindowsGenerator:
             cache_directory=cache_dir,
         )
 
-        if not test_chromosomes:
-            self.test_chromosomes = []
+        if not val_chromosomes:
+            self.val_chromosomes = []
 
         # If no chromosomes passed then use all the genome
         if not train_chromosomes:
             self.chromosomes = sorted(list(self.genome))
         else:
-            self.chromosomes = train_chromosomes + self.test_chromosomes
+            self.chromosomes = train_chromosomes + self.val_chromosomes
 
         self.instance_hash = sha256(
             {
@@ -115,13 +115,13 @@ class GenomeWindowsGenerator:
         windows = self._tasselize_windows(filled, self.window_size)
         sequences = self._encode_sequences(windows)
 
-        self._windows_train, self._windows_test = self._train_test_split(
+        self._windows_train, self._windows_val = self._train_val_split(
             sequences)
 
         gap_mask = self._render_gaps()
         self._mean, self._cov = _model_gaps(gap_mask)
 
-    def _train_test_split(self, sequences):
+    def _train_val_split(self, sequences):
         # Get the set of chromosomes
         # TODO do we need a seed here?
         # Find the splitting index
@@ -133,24 +133,27 @@ class GenomeWindowsGenerator:
                     desc="Groupping Train windows",
                     leave=False
                 )
-                if chrom not in self.test_chromosomes
+                if chrom not in self.val_chromosomes
             ], []
         )
-        windows_test = sum(
+        windows_val = sum(
             (
                 sequences[chrom].sequence.tolist()
                 for chrom in tqdm(
                     self.chromosomes,
-                    desc="Groupping Test windows",
+                    desc="Groupping val windows",
                     leave=False
                 )
-                if chrom in self.test_chromosomes
+                if chrom in self.val_chromosomes
             ), []
         )
-        return windows_train, windows_test
+        return windows_train, windows_val
 
-    def __len__(self):
+    def steps_per_epoch(self):
         return len(self._windows_train) // self.batch_size
+
+    def validation_steps(self):
+        return len(self._windows_val) // self.batch_size
 
     @cache_method("{_cache_directory}/{instance_hash}_filled.pkl")
     def _filled(self):
@@ -217,16 +220,16 @@ class GenomeWindowsGenerator:
             for batch in buffer:
                 yield batch
 
-    def train(self):
+    def generator(self):
         return self._generator(self._windows_train)
 
-    def test(self):
-        if not self.test_chromosomes:
+    def validation_data(self):
+        if not self.val_chromosomes:
             raise ValueError(
-                "Can't return the test generator since "
-                "no test chromosomes were specified"
+                "Can't return the val generator since "
+                "no val chromosomes were specified"
             )
-        return self._generator(self._windows_test)
+        return self._generator(self._windows_val)
 
     def clean_cache(self):
         if os.path.exists(self._cache_directory):

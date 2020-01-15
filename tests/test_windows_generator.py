@@ -8,12 +8,12 @@ def test_winodws_generator():
         batch_size=3,
         buffer_size=5,
         train_chromosomes=["chr1"],
-        test_chromosomes=["chr2"],
+        val_chromosomes=["chr2"],
         clear_cache=True,
         cache_dir="/tmp",
     )
 
-    next(data_generator.train())
+    next(data_generator.generator())
 
     data_generator.close()
 
@@ -22,10 +22,10 @@ def test_winodws_generator():
         window_size=200,
         batch_size=3,
         train_chromosomes=["chr1"],
-        test_chromosomes=["chr2"],
+        val_chromosomes=["chr2"],
         cache_dir="/tmp",
     )
 
-    next(data_generator.test())
+    next(data_generator.generator())
 
     data_generator.close()
